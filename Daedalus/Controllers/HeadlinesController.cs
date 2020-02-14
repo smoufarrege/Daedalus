@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NewsAPI;
 using NewsAPI.Models;
 using NewsAPI.Constants;
+using Microsoft.Extensions.Configuration;
 
 namespace Daedalus.Controllers
 {
@@ -14,11 +14,13 @@ namespace Daedalus.Controllers
     {
         private readonly ILogger<HeadlinesController> _logger;
         private readonly NewsApiClient _newsApiClient;
+        private readonly IConfiguration _config;
 
-        public HeadlinesController(ILogger<HeadlinesController> logger)
+        public HeadlinesController(ILogger<HeadlinesController> logger, IConfiguration config)
         {
             _logger = logger;
-            _newsApiClient = new NewsApiClient("f67a4c061049407bbc652b6ed8f061c0");
+            _config = config;
+            _newsApiClient = new NewsApiClient(config.GetValue<string>("AppSettings:NewsApiKey"));
         }
 
         // Uses /api/headlines/some-search-query
